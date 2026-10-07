@@ -1,0 +1,11 @@
+{
+  "name": "co-ty-phu-viet-nam-3d",
+  "version": "1.0.0",
+  "description": "Cờ Tỷ Phú 3D với bối cảnh công trình, thắng cảnh Việt Nam (Three.js)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/*.test.js"
+  }
+}
