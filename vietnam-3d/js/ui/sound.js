@@ -5,8 +5,10 @@ const KEY = 'cotyphu-vn-muted';
 export class Sound {
   constructor() {
     this.base = {};
+    // Bản HTML một file nhúng sẵn âm thanh dạng data URI qua window.COTYPHU_ASSETS.
+    const embedded = (globalThis.COTYPHU_ASSETS && globalThis.COTYPHU_ASSETS.sounds) || {};
     for (const [k, src] of Object.entries(FILES)) {
-      const a = new Audio(src);
+      const a = new Audio(embedded[k] || src);
       a.preload = 'auto';
       this.base[k] = a;
     }

@@ -18,6 +18,17 @@ python3 -m http.server 8080     # hoặc: npm start
 
 Không cần build hay `npm install`: Three.js r170 đã được vendor sẵn trong `vendor/three/`. Có thể deploy thẳng lên GitHub Pages, Netlify hoặc bất kỳ static host nào.
 
+### Bản HTML một file (mở bằng nhấp đúp)
+
+[`dist/co-ty-phu-viet-nam-3d.html`](dist/co-ty-phu-viet-nam-3d.html) gói sẵn toàn bộ JS, CSS, Three.js và âm thanh vào một file (~740 KB). Chỉ cần nhấp đúp để mở, không cần server, có thể gửi qua chat hoặc email. Khi không có mạng, game vẫn chạy và tự dùng font dự phòng thay cho Be Vietnam Pro.
+
+Sau khi sửa mã nguồn, build lại bằng:
+
+```bash
+npm install          # chỉ cần lần đầu (cài esbuild)
+npm run build:html   # → dist/co-ty-phu-viet-nam-3d.html
+```
+
 Chạy test của engine luật chơi (Node ≥ 18):
 
 ```bash
@@ -72,6 +83,8 @@ vietnam-3d/
 │   │   ├── dice3d.js     # xúc xắc 3D, dừng đúng mặt mà engine trả về
 │   │   └── helpers.js
 │   └── ui/{hud.js, sound.js}
+├── tools/build-html.mjs  # đóng gói thành 1 file HTML
+├── dist/                 # bản HTML một file đã build
 ├── tests/game.test.js    # 13 test, trong đó có mô phỏng 300 ván bot
 ├── sound/                # âm thanh dùng lại từ game gốc
 └── vendor/three/         # Three.js r170 (MIT)

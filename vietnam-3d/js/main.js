@@ -190,7 +190,7 @@ function renderAll() {
   hud.renderPlayers(game);
   hud.setRound(game.state.round, game.state.maxRounds);
   hud.setPot(game.state.pot);
-  if (hud.pinnedTile !== null) hud.showTileCard(hud.pinnedTile, game, true);
+  hud.refreshTileCard(game);
 }
 
 // ------------------------------------------------------------------ vòng lặp lượt chơi
@@ -376,6 +376,7 @@ async function playEvent(e) {
       board.setOwner(e.tile, p.color);
       sound.play('cash');
       hud.addLog(`${tag} đã mua ${tileName} 🎉`);
+      hud.refreshTileCard(game);
       hud.toast(`${p.name} sở hữu ${TILES[e.tile].name}`);
       await wait(350);
       break;
@@ -383,6 +384,7 @@ async function playEvent(e) {
       board.setLevel(e.tile, e.level, p.color);
       sound.play('build');
       hud.addLog(`${tag} xây <b>${LEVEL_NAMES[e.level]}</b> tại ${tileName}`);
+      hud.refreshTileCard(game);
       await wait(550);
       break;
     case 'sellBuilding':

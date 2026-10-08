@@ -106,6 +106,7 @@ export class Hud {
   showTileCard(index, game, pinned = false) {
     if (this.pinnedTile !== null && !pinned && index !== this.pinnedTile) return;
     if (pinned) this.pinnedTile = index;
+    this.shownTile = index;
     const tile = TILES[index];
     const st = game.state.tiles[index];
     const band = tile.group ? GROUPS[tile.group] : null;
@@ -141,7 +142,14 @@ export class Hud {
   hideTileCard(force = false) {
     if (this.pinnedTile !== null && !force) return;
     this.pinnedTile = null;
+    this.shownTile = null;
     this.tileCard.hidden = true;
+  }
+
+  /** Vẽ lại thẻ ô đang hiển thị để chủ sở hữu / cấp công trình luôn mới nhất. */
+  refreshTileCard(game) {
+    if (this.tileCard.hidden || this.shownTile === null || this.shownTile === undefined) return;
+    this.showTileCard(this.shownTile, game, this.pinnedTile === this.shownTile);
   }
 
   // ---------- hành động ----------
