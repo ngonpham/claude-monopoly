@@ -241,7 +241,12 @@ export class Hud {
           const act = b.dataset.act;
           if (act === 'build') onBuild(i);
           else if (act === 'sellb') onSellBuilding(i);
-          else onSellLand(i);
+          else if (b.dataset.armed) onSellLand(i);
+          else {
+            // xác nhận ngay trên nút (trình duyệt nhúng có thể chặn confirm())
+            b.dataset.armed = '1';
+            b.textContent = 'Bấm lần nữa để bán';
+          }
         }));
       },
     });

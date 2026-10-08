@@ -473,10 +473,7 @@ function openManage() {
   const handlers = {
     onBuild: (i) => act(() => game.buildOn(i)).then(refresh),
     onSellBuilding: (i) => act(() => game.sellBuilding(i)).then(refresh),
-    onSellLand: (i) => {
-      if (!window.confirm(`Bán ${TILES[i].name} cho ngân hàng với giá ${formatMoney(Math.floor(TILES[i].price / 2))}?`)) return;
-      act(() => game.sellProperty(i)).then(refresh);
-    },
+    onSellLand: (i) => act(() => game.sellProperty(i)).then(refresh),
   };
   hud.showManage(game, handlers);
 }

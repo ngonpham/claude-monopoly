@@ -1,6 +1,8 @@
 // Đóng gói toàn bộ game thành MỘT file HTML tự chứa (JS, CSS, Three.js, âm thanh),
 // mở được bằng cách nhấp đúp (file://) mà không cần web server.
 // Chạy: npm install && npm run build:html  →  dist/co-ty-phu-viet-nam-3d.html
+// Thêm `--artifact <đường-dẫn>` để xuất thêm bản không có khung doctype/html/head/body
+// (dùng khi đăng lên claude.ai Artifact, nơi khung trang được bọc tự động).
 import { build } from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -51,3 +53,24 @@ const out = join(root, 'dist/co-ty-phu-viet-nam-3d.html');
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, html);
 console.log(`Đã tạo ${out} (${(Buffer.byteLength(html) / 1024).toFixed(0)} KB)`);
+
+const flag = process.argv.indexOf('--artifact');
+if (flag !== -1) {
+  const target = resolve(process.argv[flag + 1] || join(root, 'dist/artifact.html'));
+  const body = html
+    .replace(/<!doctype html>\s*/i, '')
+    .replace(/<html[^>]*>\s*/i, '')
+    .replace(/<\/html>\s*$/i, '')
+    .replace(/<head>\s*/i, '')
+    .replace(/<\/head>\s*/i, '')
+    .replace(/<body>\s*/i, '')
+    .replace(/<\/body>\s*/i, '')
+    .replace(/\s*<meta charset="utf-8">/i, '')
+    .replace(/\s*<meta name="viewport"[^>]*>/i, '');
+  // <title> phải nằm trong 8 KB đầu tiên của file.
+  const titleMatch = body.match(/\s*<title>[^<]*<\/title>/i);
+  const page = titleMatch ? `${titleMatch[0].trim()}\n${body.replace(titleMatch[0], '')}` : body;
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, page);
+  console.log(`Đã tạo bản Artifact ${target}`);
+}

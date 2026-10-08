@@ -27,6 +27,8 @@ Sau khi sửa mã nguồn, build lại bằng:
 ```bash
 npm install          # chỉ cần lần đầu (cài esbuild)
 npm run build:html   # → dist/co-ty-phu-viet-nam-3d.html
+# thêm bản không có khung <html>/<head>/<body> để đăng lên claude.ai Artifact:
+npm run build:html -- --artifact dist/artifact.html
 ```
 
 Chạy test của engine luật chơi (Node ≥ 18):
