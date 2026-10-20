@@ -2,6 +2,8 @@
 
 > 🇻🇳 **Mới:** [Cờ Tỷ Phú Việt Nam 3D](vietnam-3d/) là bản viết lại hoàn toàn bằng Three.js r170, bối cảnh là các công trình và thắng cảnh Việt Nam (Hạ Long, Hội An, Cầu Vàng, Landmark 81...). Chơi offline 2–4 người hoặc đấu với máy, không cần backend. Xem [vietnam-3d/README.md](vietnam-3d/README.md).
 
+> 📱 **Android:** bản port Kotlin native (OpenGL ES 3.0 + Jetpack Compose) nằm trong [android/](android/). Xem [android/README.md](android/README.md).
+
 ## Play Online
 https://goo.gl/mFvHvU
 
