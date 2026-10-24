@@ -31,6 +31,17 @@ npm run build:html   # → dist/co-ty-phu-viet-nam-3d.html
 npm run build:html -- --artifact dist/artifact.html
 ```
 
+### Bản Astrocade
+
+Game được đăng trên [Astrocade](https://www.astrocade.com) với ảnh bìa [`docs/cover-2x3.jpg`](docs/cover-2x3.jpg) (bản ngang: [`docs/cover-16x9.jpg`](docs/cover-16x9.jpg)). Build gói cho Astrocade bằng:
+
+```bash
+npm run build:html -- --astrocade dist/astrocade/game_code.html
+# → dist/astrocade/{game_code.html, game_config.json, asset_map.json, persistent_storage_config.json}
+```
+
+Khác biệt so với bản thường: JS gói dạng IIFE và chỉ khởi động khi Astrocade gọi `window.run(mode)`; font Be Vietnam Pro (`fonts/`, giấy phép OFL) nhúng sẵn vì iframe không tải được Google Fonts; ván đang chơi và tuỳ chọn âm thanh lưu qua `lib.saveUserGameState` thay cho `localStorage` (bị sandbox chặn); HUD phóng to ×1,8 cho khung dọc 720×1280.
+
 Chạy test của engine luật chơi (Node ≥ 18):
 
 ```bash

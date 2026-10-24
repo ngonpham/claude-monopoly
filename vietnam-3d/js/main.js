@@ -39,6 +39,7 @@ let follow = true;
 // ------------------------------------------------------------------ khởi động
 
 async function boot() {
+  sound.loadPreference();
   try {
     await Promise.race([document.fonts.load('800 40px "Be Vietnam Pro"'), wait(2500)]);
   } catch { /* dùng font dự phòng */ }
@@ -68,15 +69,28 @@ async function boot() {
 
 // ------------------------------------------------------------------ lưu / khôi phục
 
+// Nền tảng nhúng (vd. Astrocade) có thể thay localStorage bằng kho lưu của họ qua
+// window.COTYPHU_PLATFORM = { load(), save(data), clear() } — xem tools/build-html.mjs.
+const platform = () => globalThis.COTYPHU_PLATFORM || null;
+
 function save() {
   if (!game) return;
+  const over = game.state.phase === 'over';
+  const data = over ? null : { snapshot: game.snapshot(), botSpeed };
+  const p = platform();
+  if (p) {
+    if (over) p.clear(); else p.save(data);
+    return;
+  }
   try {
-    if (game.state.phase === 'over') localStorage.removeItem(SAVE_KEY);
-    else localStorage.setItem(SAVE_KEY, JSON.stringify({ snapshot: game.snapshot(), botSpeed }));
+    if (over) localStorage.removeItem(SAVE_KEY);
+    else localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   } catch { /* chế độ riêng tư: bỏ qua */ }
 }
 
 function loadSave() {
+  const p = platform();
+  if (p) return p.load();
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     return raw ? JSON.parse(raw) : null;
@@ -122,14 +136,16 @@ function setupForm() {
     setupPlayers.push({ ...def, token: TOKEN_KEYS.find((k) => !used.has(k)) || def.token });
     renderSetupRows();
   });
-  $('setup-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+  // Nút bấm thường thay vì submit: iframe sandbox không có allow-forms (Astrocade) chặn cả sự kiện submit.
+  const startNew = () => {
     const players = setupPlayers.map((p, i) => ({
       name: (p.name || '').trim() || `Người chơi ${i + 1}`, token: p.token, isBot: p.isBot, color: COLORS[i],
     }));
     botSpeed = Number($('bot-speed').value);
     startGame(new Game({ players, maxRounds: Number($('max-rounds').value) }), true);
-  });
+  };
+  $('start-btn').addEventListener('click', startNew);
+  $('setup-form').addEventListener('submit', (e) => { e.preventDefault(); startNew(); });
   $('resume-btn').addEventListener('click', () => {
     const saved = loadSave();
     if (!saved) return;
@@ -554,4 +570,6 @@ function setupKeyboard() {
   });
 }
 
-boot();
+// Bản nhúng có thể hoãn khởi động tới khi nền tảng gọi run() (Astrocade).
+if (globalThis.COTYPHU_DEFER_BOOT) globalThis.COTYPHU_BOOT = boot;
+else boot();

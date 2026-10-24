@@ -8,7 +8,9 @@ export class Stage {
   constructor(container) {
     this.container = container;
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Trong iframe 720×1280 của Astrocade (bị thu nhỏ khi hiển thị) không cần render quá 1,5×.
+    const maxDpr = document.documentElement.classList.contains('astro') ? 1.5 : 2;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;

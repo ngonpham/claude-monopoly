@@ -276,3 +276,24 @@ kbd { background: #eee; border-radius: 4px; padding: 1px 6px; border: 1px solid 
   .tools button.icon { width: 34px; height: 34px; font-size: 15px; }
   #action-buttons button { min-width: 0; flex: 1; }
 }
+
+/* ---------- bản nhúng Astrocade: iframe cố định 720×1280, bị thu nhỏ khi hiển thị ----------
+   Phóng to lớp giao diện (không phóng khung 3D) để chữ và nút đủ lớn trên điện thoại. */
+.astro #topbar, .astro #players, .astro #side, .astro #action-bar, .astro #toast,
+.astro .overlay, .astro #loading { zoom: 1.8; }
+.astro .float-text { font-size: 40px; }
+.astro .brand { display: none; }
+.astro .tools button.icon { width: 36px; height: 36px; font-size: 16px; }
+.astro #action-buttons button { min-width: 0; flex: 1; }
+.astro #side { bottom: 170px; max-height: 40vh; }
+.astro .prow { grid-template-columns: 14px 1fr 1fr 32px; }
+.astro .prow input { grid-column: 2 / 5; }
+.astro .prow select[data-f="token"] { grid-column: 2; }
+.astro .hint { display: none; }
+/* trong phần tử có zoom, vh vẫn tính theo khung chưa phóng → chia lại cho hệ số zoom */
+.astro .setup-box, .astro .modal-box { max-height: calc(100vh / 1.8 - 32px); }
+.astro #side { max-height: calc(40vh / 1.8); }
+.astro .setup-box { padding: 18px; }
+.astro .setup-title h1 { font-size: 30px; }
+.astro .setup-star { font-size: 32px; }
+.astro #action-bar { width: calc(100vw / 1.8 - 24px); }

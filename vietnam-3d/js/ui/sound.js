@@ -12,6 +12,13 @@ export class Sound {
       a.preload = 'auto';
       this.base[k] = a;
     }
+    this.muted = false;
+  }
+
+  /** Đọc tuỳ chọn tắt tiếng (kho của nền tảng nhúng nếu có, không thì localStorage). */
+  loadPreference() {
+    const p = globalThis.COTYPHU_PLATFORM;
+    if (p && p.getPref) { this.muted = !!p.getPref('muted'); return; }
     try { this.muted = localStorage.getItem(KEY) === '1'; } catch { this.muted = false; }
   }
 
@@ -24,7 +31,9 @@ export class Sound {
 
   toggle() {
     this.muted = !this.muted;
-    try { localStorage.setItem(KEY, this.muted ? '1' : '0'); } catch { /* bỏ qua */ }
+    const p = globalThis.COTYPHU_PLATFORM;
+    if (p && p.setPref) p.setPref('muted', this.muted);
+    else try { localStorage.setItem(KEY, this.muted ? '1' : '0'); } catch { /* bỏ qua */ }
     return this.muted;
   }
 }
